@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Recognizer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        .tools {
+            width:400px;
+            position:absolute;
+            left: 50%;
+            transform: translate(-50%,-100%);
+        }
+        .tools button{
+            border: 2px solid rgb(0, 0, 0);
+            width: 400px;
+            border-radius: 0px;
+        }
+        .container.mt-4{
+            /* background-color: red; */
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%,-30%);
+            /* box-shadow: black 0 0 50px; */
+        }
+        #send{
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .navbar.text-light.bg-info{
+            background-color: rgb(62, 12, 142)!important;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar text-light bg-info" >
+        <div class="mx-auto"><h1 style="font-family: arial">Number Recognizer</h1></div>
+    </nav>
+    {% if response %}
+        {% if success %}
+            <p class="alert alert-success m-4 text-center">Prediction Result : {{ response }}</p>
+        {% else %}
+            <p class="alert alert-success m-4 text-center">{{ response }}</p>
+        {% endif %}
+    {% endif %}
+    <div class="container mt-4" >
+        <div class="row" style="width: 280px; margin: auto;" >
+            <div class="tools d-flex justify-content-between">
+                <button class="btn btn-danger" id="clear">Clear</button>
+                <button class="btn btn-success" id="pastel" onclick="pastel()">Pastel</button>
+                <button class="btn btn-warning" id="eraser" onclick="eraser()">Eraser</button>
+            </div>
+        </div>
+        <form action="/drawing" method="POST" onsubmit="canvastoimage()">
+            <div class="row">
+                <div class="col d-flex justify-content-center">
+                    <input type="hidden" id="canvasimg" name="canvasimg">
+                    <input type="hidden" id="canvasdata" name="canvasdata" value="{{ canvasdata }}">
+                    <canvas id="canvas" width="400" height="280"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col d-flex justify-content-center">
+                    <button style="width: 400px;" class="btn btn-success" id="send" type="submit">Detect Number</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Canvas Drawing
+        window.addEventListener('load', ()=>{
+            const canvas = document.querySelector('#canvas');
+            const context = canvas.getContext('2d');
+
+            const canvasdata = document.querySelector('#canvasdata').value;
+            if (canvasdata){
+                const image = new Image();
+                image.onload = ()=>{
+                    context.drawImage(image, 0, 0);
+                };
+                image.src = canvasdata;
+            } else {
+                context.fillStyle = "black";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            let radius = 10;
+            let start = 0;
+            let end = Math.PI * 2;
+            let dragging = false;
+
+            context.lineWidth = radius * 2;
+            context.lineCap = 'round';
+
+            const putPoint = (e)=>{
+                if (dragging){
+                    context.fillStyle = "white";
+                    context.strokeStyle = "white";
+                    context.lineTo(e.offsetX, e.offsetY);
+                    context.stroke();
+                    context.beginPath();
+                    context.arc(e.offsetX, e.offsetY, radius, start, end);
+                    context.fill();
+                    context.beginPath();
+                    context.moveTo(e.offsetX, e.offsetY);
+                }
+            }
+
+            const engage = (e)=>{
+                dragging = true;
+                putPoint(e);
+            }
+
+            const disengage = ()=>{
+                dragging = false;
+                context.beginPath();
+            }
+
+            canvas.addEventListener('mousedown', engage);
+            canvas.addEventListener('mousemove', putPoint);
+            canvas.addEventListener('mouseup', disengage);
+
+            const clear = document.querySelector('#clear');
+            clear.addEventListener('click', ()=>{
+                const canvas = document.querySelector('#canvas');
+                const context = canvas.getContext('2d');
+                context.filter = 'invert(0)';
+                context.fillStyle = "black";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // Pastel
+            const pastel = document.querySelector('#pastel');
+            pastel.addEventListener('click', ()=>{
+                const canvas = document.querySelector('#canvas');
+                const context = canvas.getContext('2d');
+                context.filter = 'invert(0)';
+                radius = 10;
+            });
+
+            // Eraser
+            const eraser = document.querySelector('#eraser');
+            eraser.addEventListener('click', ()=>{
+                const canvas = document.querySelector('#canvas');
+                const context = canvas.getContext('2d');
+                context.filter = 'invert(1)';
+                radius = 30;
+            });
+        });
+
+        // Canvas Submit
+        const canvastoimage = ()=>{
+            const canvas = document.querySelector('#canvas');
+            document.getElementById('canvasimg').value = canvas.toDataURL();
+        };
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing:inherit;
+}
+
+.column {
+  float:left;
+  width: 25%;
+  
+  margin-bottom: 10px;
+  padding: 0.2px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(192, 120, 220, 0.958);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #47575d;
+  color: white;
+}
+
+.container {
+  padding: 10px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="about-section">
+  <h1>About Us Page</h1>
+  <p><strong>IBM-Project-5518-1658772138</strong><br>
+    <strong>Domain :</strong> Artificial Intelligence <br>
+    <strong>Project:</strong> A Novel Method for Handwritten Digit Recognition System <br>
+    <strong>Team ID:</strong> PNT2022TMID29644<br>
+    <strong>Batch:</strong> B9-3A5E <br>
+  </p>
+</div>
+
+<h2 style="text-align:center">Members</h2>
+<!-- <div class="row"> -->
+  <div class="column">
+    <div class="card">
+      <div class="container">
+        <h2>Amrutha S</h2>
+        <p class="title">Team lead</p>
+        <p>amruthasankar1620@gmail.com</p>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="column">
+    <!-- <div class="row"> -->
+    <div class="card">
+      <div class="container">
+        <h2>Anitha K</h2>
+        <p class="title">Member1</p>
+        <p>anithavelv@gmail.com</p>
+      </div>
+    </div>
+    </div>
+  </div>
+<!-- 
+  <div class="row"> -->
+  <div class="column">
+    <div class="card">
+      <div class="container">
+        <h2>Devendran M</h2>
+        <p class="title">Member2</p>
+        <p>devashiva8778@gmail.com</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+<div class="column">
+    <div class="card">
+      <div class="container">
+        <h2>Hemavathy T A</h2>
+        <p class="title">Member3</p>
+        <p>hemaumaamar@gmail.com</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3> About Project:</h3>
+<p> Handwriting recognition is one of the compelling research works going on because every individual in this world has their own style of writing.It is the capability of the computer to identify and understand handwritten digits or characters automatically. Because of the progress in the field of science and technology, everything is being digitalized to reduce human effort. Hence, there comes a need for handwritten digit recognition in many real-time applications. MNIST data set is widely used for this recognition process and it has 70000 handwritten digits. We use Artificial neural networks to train these images and build a deep learning model. Web application is created where the user can upload an image of a handwritten digit. this image is analyzed by the model and the detected result is returned on to UI.
+</p>
+
+</body>
+</html>
